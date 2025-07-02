@@ -4,11 +4,10 @@
   "description": "API for ecommerce project",
   "main": "dist/app.js",
   "scripts": {
-    "build": "tsc",
     "start": "node dist/app.js",
-    "dev": "concurrently \"npx tsc -w\" \"nodemon dist/app.js\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "npm run build"
+    "dev": "concurrently \"npm run build\" \"nodemon dist/app.js\" ", 
+    "build": "tsc", 
+    "postinstall": "npm run build" 
   },
   "keywords": [],
   "author": "",
