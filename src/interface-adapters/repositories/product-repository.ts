@@ -9,4 +9,5 @@ export interface ProductRepository {
   delete(id: string): Promise<void>;
   findByCategory(categoryId: string): Promise<Product[]>;
   findByCategoryName(categoryName: string): Promise<Product[]>;
+  findSingleProductPerCategory(): Promise<Product[]>;
 }

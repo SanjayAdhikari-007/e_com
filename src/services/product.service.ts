@@ -107,6 +107,19 @@ export const findProductsByCategory = async (categoryId: string): Promise<Produc
     return productRepository.findByCategory(categoryId);
 };
 
+export const getSingleProductPerCategory = async (): Promise<Product[]> => {
+  try {
+    const products = await productRepository.findSingleProductPerCategory();
+    logger.info('Service: Retrieved single product per category', { count: products.length });
+    return products;
+  } catch (error: any) {
+    logger.error('Service: Error retrieving single product per category:', { error: error.message, stack: error.stack });
+    throw error;
+  }
+};
+
+
+
 export const findProductsByCategoryName = async (categoryName: string): Promise<Product[]> => {
     return productRepository.findByCategoryName(categoryName);
 };

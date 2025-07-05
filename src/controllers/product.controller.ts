@@ -7,7 +7,8 @@ import {
   updateProduct,
   deleteProduct,
   findProductsByCategory,
-  findProductsByCategoryName
+  findProductsByCategoryName,
+  getSingleProductPerCategory
 } from '../services/product.service';
 import { Product } from '../entities/product';
 import upload from '../middleware/upload.middleware';
@@ -205,4 +206,16 @@ export const getProductsByCategoryNameAndColorHandler = async (req: Request, res
     } catch (error) {
         res.status(500).json({ message: 'Failed to retrieve products with given description', error });
     }
+};
+
+export const getSingleProductPerCategoryHandler = async (req: Request, res: Response) => {
+  try {
+    logger.info('Controller: Incoming request to get single product per category');
+    const products = await getSingleProductPerCategory();
+    res.status(200).json(products);
+    logger.info('Controller: Sent single product per category', { count: products.length });
+  } catch (error: any) {
+    logger.error('Controller: Error getting single product per category:', { error: error.message, stack: error.stack });
+    res.status(500).json({ message: 'Failed to retrieve single product per category.', error: error.message });
+  }
 };

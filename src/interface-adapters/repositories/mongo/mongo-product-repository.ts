@@ -65,26 +65,52 @@ class ProductRepositoryImpl implements ProductRepository {
 
   async findByCategory(categoryId: string): Promise<Product[]> {
     try {
-        const productDocuments = await ProductModel.find({ category: categoryId }).populate('category');
-        return productDocuments.map(this.mapToProductEntity);
+      const productDocuments = await ProductModel.find({ category: categoryId }).populate('category');
+      return productDocuments.map(this.mapToProductEntity);
     } catch (error) {
-        logger.error('Error finding products by category:', error);
-        throw error;
+      logger.error('Error finding products by category:', error);
+      throw error;
     }
-}
+  }
+
+  async findSingleProductPerCategory(): Promise<Product[]> {
+    try {
+      const result = await ProductModel.aggregate([
+        {
+          $sort: { category: 1, _id: 1 }
+        },
+        {
+          $group: {
+            _id: "$category", // Group by the category ID
+            singleProduct: { $first: "$$ROOT" } // Take the entire first product document found for this category
+          }
+        },
+        {
+          $replaceRoot: { newRoot: "$singleProduct" }
+        },
+      ]);
+
+      logger.info('Repo: Fetched single product per category', { count: result.length });
+      // The result of aggregation will match IProduct structure due to $replaceRoot and $lookup.
+      return result as Product[];
+    } catch (error: any) {
+      logger.error('Repo: Error fetching single product per category:', { error: error.message, stack: error.stack });
+      throw new Error('Failed to fetch single product per category from database.');
+    }
+  }
 
   async findByCategoryName(categoryName: string): Promise<Product[]> {
     try {
-      const categoryDoc = await CategoryModel.findOne({name:categoryName});
+      const categoryDoc = await CategoryModel.findOne({ name: categoryName });
       const productDocuments = await ProductModel.find({ category: categoryDoc?.id }).populate('category');
       return productDocuments.map(this.mapToProductEntity);
     } catch (error) {
-        logger.error('Error finding products by category:', error);
-        throw error;
+      logger.error('Error finding products by category:', error);
+      throw error;
     }
-}
+  }
 
-private mapToProductEntity(productDocument: ProductDocument): Product {
+  private mapToProductEntity(productDocument: ProductDocument): Product {
     return {
       id: productDocument.id.toString(), // Convert Mongoose _id to string
       title: productDocument.title,

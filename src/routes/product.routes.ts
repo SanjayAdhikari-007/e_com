@@ -11,7 +11,8 @@ import {
   createProductWithImagesHandler, // New create with images
   updateProductWithImagesHandler,
   getProductsByCategoryAndColorHandler,
-  getProductsByCategoryNameAndColorHandler
+  getProductsByCategoryNameAndColorHandler,
+  getSingleProductPerCategoryHandler
 } from '../controllers/product.controller';// Make sure this is imported
 import upload from '../middleware/upload.middleware'; // Make sure your upload middleware is imported here
 import logger from '../config/logger';
@@ -59,6 +60,7 @@ const handleMulterError = (req: Request, res: Response, next: NextFunction) => {
 
 const router = Router();
 
+router.get('/percategory', getSingleProductPerCategoryHandler);
 router.post('/', createProductHandler);
 router.get('/:id', getProductByIdHandler);
 router.get('/', getAllProductsHandler);
