@@ -88,6 +88,24 @@ class ProductRepositoryImpl implements ProductRepository {
         {
           $replaceRoot: { newRoot: "$singleProduct" }
         },
+        {
+          $project: {
+            id: "$_id",
+            title: 1,         
+            detail: 1,  
+            price: 1,       
+            category: 1,     
+            images: 1,    
+            createdAt: 1,    
+            isInStock: 1,    
+            brandName: 1,
+            discountRate: 1,
+            priceAfterDiscount: 1,
+            rating: 1,
+            color:1,
+            _id: 0,          
+          }
+        }
       ]);
 
       logger.info('Repo: Fetched single product per category', { count: result.length });
