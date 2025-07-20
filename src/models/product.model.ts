@@ -14,8 +14,10 @@ const ProductSchema: Schema = new Schema(
     category: { type: Schema.Types.ObjectId, ref: 'Category', required: true }, // Reference to the Category model
     brandName: { type: String },
     isInStock: { type: Boolean, required: true, default: true },
+    isFeatured: { type: Boolean, required: true, default: false },
     images: [{ type: String }], // Array of image URLs/paths
     color: {type: String},
+    pattern: {type: String},
     discountRate: {type: Number, min:0, max:100},
     priceAfterDiscount: {type: Number},
     rating: {type: Number, min:0, max:5 },

@@ -8,7 +8,9 @@ import {
   deleteProduct,
   findProductsByCategory,
   findProductsByCategoryName,
-  getSingleProductPerCategory
+  getSingleProductPerCategory,
+  findFeatured,
+  findTwoProductsPerCategory
 } from '../services/product.service';
 import { Product } from '../entities/product';
 import upload from '../middleware/upload.middleware';
@@ -39,7 +41,9 @@ export const createProductWithImagesHandler = [
         category: req.body.category,
         brandName: req.body.brandName,
         isInStock: req.body.isInStock,
+        isFeatured: req.body.isFeatured,
         color: req.body.color,
+        pattern: req.body.pattern,
         discountRate: req.body.discountRate,
         priceAfterDiscount: req.body.priceAfterDiscount,
         rating: req.body.rating
@@ -100,6 +104,7 @@ export const updateProductWithImagesHandler = [
         images: imagePaths, // Extra
         isInStock: req.body.isInStock,
         color: req.body.color,
+        pattern: req.body.pattern,
         discountRate: req.body.discountRate,
         priceAfterDiscount: req.body.priceAfterDiscount,
         rating: req.body.rating
@@ -176,6 +181,15 @@ export const getProductsByCategoryHandler = async (req: Request, res: Response):
     }
 };
 
+export const getProductsFeatured = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const products = await findFeatured();
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve featured products', error });
+    }
+};
+
 export const getProductsByCategoryAndColorHandler = async (req: Request, res: Response): Promise<void> => {
     try {
         const { categoryId } = req.params;
@@ -208,10 +222,68 @@ export const getProductsByCategoryNameAndColorHandler = async (req: Request, res
     }
 };
 
+export const getProductsByCategoryNameAndPatternHandler = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { categoryName } = req.params;
+        const { pattern } = req.query;
+        var products = await findProductsByCategoryName(categoryName);
+        
+        if (pattern) {
+          products = products.filter(product => product.pattern.toLowerCase() === (pattern as string).toLowerCase());
+        }
+
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve products with given description', error });
+    }
+};
+
+export const getProductsByCategoryName = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { categoryName } = req.params;
+        var products = await findProductsByCategoryName(categoryName);
+
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve products with given description', error });
+    }
+};
+
+export const getProductsByCategoryNamePatternAndColorHandler = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { categoryName } = req.params;
+        const { color, pattern } = req.query;
+        var products = await findProductsByCategoryName(categoryName);
+        
+        if (color) {
+          products = products.filter(product => product.color.toLowerCase() === (color as string).toLowerCase());
+        }
+        if (pattern) {
+          products = products.filter(product => product.pattern.toLowerCase() === (pattern as string).toLowerCase());
+        }
+
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve products with given description', error });
+    }
+};
+
 export const getSingleProductPerCategoryHandler = async (req: Request, res: Response) => {
   try {
     logger.info('Controller: Incoming request to get single product per category');
     const products = await getSingleProductPerCategory();
+    res.status(200).json(products);
+    logger.info('Controller: Sent single product per category', { count: products.length });
+  } catch (error: any) {
+    logger.error('Controller: Error getting single product per category:', { error: error.message, stack: error.stack });
+    res.status(500).json({ message: 'Failed to retrieve single product per category.', error: error.message });
+  }
+};
+
+export const getTwoProductsPerCategoryHandler = async (req: Request, res: Response) => {
+  try {
+    logger.info('Controller: Incoming request to get single product per category');
+    const products = await findTwoProductsPerCategory();
     res.status(200).json(products);
     logger.info('Controller: Sent single product per category', { count: products.length });
   } catch (error: any) {

@@ -12,7 +12,12 @@ import {
   updateProductWithImagesHandler,
   getProductsByCategoryAndColorHandler,
   getProductsByCategoryNameAndColorHandler,
-  getSingleProductPerCategoryHandler
+  getSingleProductPerCategoryHandler,
+  getProductsByCategoryNamePatternAndColorHandler,
+  getProductsByCategoryName,
+  getProductsByCategoryNameAndPatternHandler,
+  getProductsFeatured,
+  getTwoProductsPerCategoryHandler
 } from '../controllers/product.controller';// Make sure this is imported
 import upload from '../middleware/upload.middleware'; // Make sure your upload middleware is imported here
 import logger from '../config/logger';
@@ -60,7 +65,8 @@ const handleMulterError = (req: Request, res: Response, next: NextFunction) => {
 
 const router = Router();
 
-router.get('/percategory', getSingleProductPerCategoryHandler);
+router.get('/percategory', getTwoProductsPerCategoryHandler);
+router.get('/featured', getProductsFeatured);
 router.post('/', createProductHandler);
 router.get('/:id', getProductByIdHandler);
 router.get('/', getAllProductsHandler);
@@ -68,7 +74,10 @@ router.put('/:id', updateProductHandler);
 router.delete('/:id', deleteProductHandler);
 router.get('/category/:categoryId', getProductsByCategoryHandler);
 router.get('/vs/:categoryId', getProductsByCategoryAndColorHandler);
-router.get('/visual_search/:categoryName', getProductsByCategoryNameAndColorHandler);
+router.get('/vsc/:categoryName', getProductsByCategoryName);
+router.get('/vscc/:categoryName', getProductsByCategoryNameAndColorHandler);
+router.get('/vscp/:categoryName', getProductsByCategoryNameAndPatternHandler);
+router.get('/visual_search/:categoryName', getProductsByCategoryNamePatternAndColorHandler);
 
 // Routes for creating and updating products with image uploads
 router.post('/with-images', handleMulterError ,createProductWithImagesHandler);

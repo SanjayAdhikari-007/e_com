@@ -8,6 +8,8 @@ export interface ProductRepository {
   update(id: string, product: Partial<Omit<Product, 'id' | 'createdAt'>>): Promise<Product | null>;
   delete(id: string): Promise<void>;
   findByCategory(categoryId: string): Promise<Product[]>;
+  findFeatured(): Promise<Product[]>;
   findByCategoryName(categoryName: string): Promise<Product[]>;
   findSingleProductPerCategory(): Promise<Product[]>;
+  findTwoProductsPerCategory(): Promise<Product[]>;
 }

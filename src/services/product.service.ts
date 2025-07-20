@@ -107,6 +107,10 @@ export const findProductsByCategory = async (categoryId: string): Promise<Produc
     return productRepository.findByCategory(categoryId);
 };
 
+export const findFeatured = async (): Promise<Product[]> => {
+    return productRepository.findFeatured();
+};
+
 export const getSingleProductPerCategory = async (): Promise<Product[]> => {
   try {
     const products = await productRepository.findSingleProductPerCategory();
@@ -114,6 +118,17 @@ export const getSingleProductPerCategory = async (): Promise<Product[]> => {
     return products;
   } catch (error: any) {
     logger.error('Service: Error retrieving single product per category:', { error: error.message, stack: error.stack });
+    throw error;
+  }
+};
+
+export const findTwoProductsPerCategory = async (): Promise<Product[]> => {
+  try {
+    const products = await productRepository.findTwoProductsPerCategory();
+    logger.info('Service: Retrieved two products per category', { count: products.length });
+    return products;
+  } catch (error: any) {
+    logger.error('Service: Error retrieving two products per category:', { error: error.message, stack: error.stack });
     throw error;
   }
 };
