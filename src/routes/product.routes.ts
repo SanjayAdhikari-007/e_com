@@ -66,6 +66,7 @@ const handleMulterError = (req: Request, res: Response, next: NextFunction) => {
 const router = Router();
 
 router.get('/percategory', getTwoProductsPerCategoryHandler);
+router.get('/twopercategory', getTwoProductsPerCategoryHandler);
 router.get('/featured', getProductsFeatured);
 router.post('/', createProductHandler);
 router.get('/:id', getProductByIdHandler);
