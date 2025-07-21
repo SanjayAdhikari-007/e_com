@@ -122,22 +122,22 @@ class ProductRepositoryImpl implements ProductRepository {
         // Rename _id to id and select specific fields.
         {
           $project: {
-            id: "$_id", // Create 'id' field from '_id'
-            _id: 0,      // Exclude the original '_id' field
-            name: "$name", // Assuming 'name' is the field for product title
-            description: "$description", // Assuming 'detail' is 'description'
-            price: 1,
-            category: 1,
-            imageUrls: "$imageUrls", // Assuming 'images' is 'imageUrls'
-            createdAt: 1,
-            updatedAt: 1,
-            // Assuming these fields exist in your Product model
-            isInStock: 1,
+            id: "$_id",
+            title: 1,         
+            detail: 1,  
+            price: 1,       
+            category: 1,     
+            images: 1,    
+            createdAt: 1,    
+            isInStock: 1,    
+            isFeatured: 1,   
+            pattern: 1, 
             brandName: 1,
             discountRate: 1,
             priceAfterDiscount: 1,
             rating: 1,
-            color: 1,
+            color:1,
+            _id: 0,          
           }
         }
       ]);
