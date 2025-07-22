@@ -17,7 +17,8 @@ import {
   getProductsByCategoryName,
   getProductsByCategoryNameAndPatternHandler,
   getProductsFeatured,
-  getTwoProductsPerCategoryHandler
+  getTwoProductsPerCategoryHandler,
+  getProductsPopular
 } from '../controllers/product.controller';// Make sure this is imported
 import upload from '../middleware/upload.middleware'; // Make sure your upload middleware is imported here
 import logger from '../config/logger';
@@ -65,6 +66,7 @@ const handleMulterError = (req: Request, res: Response, next: NextFunction) => {
 
 const router = Router();
 
+router.get('/popular', getProductsPopular);
 router.get('/percategory', getTwoProductsPerCategoryHandler);
 router.get('/twopercategory', getTwoProductsPerCategoryHandler);
 router.get('/featured', getProductsFeatured);

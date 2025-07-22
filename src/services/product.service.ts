@@ -111,6 +111,10 @@ export const findFeatured = async (): Promise<Product[]> => {
     return productRepository.findFeatured();
 };
 
+export const findPopular = async (): Promise<Product[]> => {
+    return productRepository.findPopular();
+};
+
 export const getSingleProductPerCategory = async (): Promise<Product[]> => {
   try {
     const products = await productRepository.findSingleProductPerCategory();

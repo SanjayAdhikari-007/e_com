@@ -15,6 +15,7 @@ const ProductSchema: Schema = new Schema(
     brandName: { type: String },
     isInStock: { type: Boolean, required: true, default: true },
     isFeatured: { type: Boolean, required: true, default: false },
+    isPopular: { type: Boolean, required: true, default: false },
     images: [{ type: String }], // Array of image URLs/paths
     color: {type: String},
     pattern: {type: String},

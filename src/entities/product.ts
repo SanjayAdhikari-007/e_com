@@ -13,5 +13,6 @@ export interface Product {
     images: string[];
     isInStock: boolean;
     isFeatured: boolean;
+    isPopular: boolean;
     createdAt: Date;
   }

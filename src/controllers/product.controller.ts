@@ -10,7 +10,8 @@ import {
   findProductsByCategoryName,
   getSingleProductPerCategory,
   findFeatured,
-  findTwoProductsPerCategory
+  findTwoProductsPerCategory,
+  findPopular
 } from '../services/product.service';
 import { Product } from '../entities/product';
 import upload from '../middleware/upload.middleware';
@@ -42,6 +43,7 @@ export const createProductWithImagesHandler = [
         brandName: req.body.brandName,
         isInStock: req.body.isInStock,
         isFeatured: req.body.isFeatured,
+        isPopular: req.body.isPopular,
         color: req.body.color,
         pattern: req.body.pattern,
         discountRate: req.body.discountRate,
@@ -187,6 +189,15 @@ export const getProductsFeatured = async (req: Request, res: Response): Promise<
         res.status(200).json(products);
     } catch (error) {
         res.status(500).json({ message: 'Failed to retrieve featured products', error });
+    }
+};
+
+export const getProductsPopular = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const products = await findPopular();
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to retrieve popular products', error });
     }
 };
 

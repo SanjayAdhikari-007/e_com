@@ -83,6 +83,16 @@ class ProductRepositoryImpl implements ProductRepository {
     }
   }
 
+  async findPopular(): Promise<Product[]> {
+    try {
+      const productDocuments = await ProductModel.find({ isPopular: true }).populate('category');
+      return productDocuments.map(this.mapToProductEntity);
+    } catch (error) {
+      logger.error('Error Finding Popular products :', error);
+      throw error;
+    }
+  }
+
   async findTwoProductsPerCategory(): Promise<Product[]> { // Renamed method for clarity
     try {
       const result = await ProductModel.aggregate([
@@ -215,6 +225,7 @@ class ProductRepositoryImpl implements ProductRepository {
       category: (productDocument.category as any)._id.toString(), // Access _id of populated Category
       brandName: productDocument.brandName,
       isInStock: productDocument.isInStock,
+      isPopular: productDocument.isPopular,
       isFeatured: productDocument.isFeatured,
       images: productDocument.images,
       createdAt: productDocument.createdAt,
